@@ -86,9 +86,19 @@ class JobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        ScaffoldMessenger.of(
+        Navigator.push(
           context,
-        ).showSnackBar(SnackBar(content: Text("Kamu memilih $title")));
+
+          MaterialPageRoute(
+            builder:
+                (context) => DetailScreen(
+                  title: title,
+                  company: company,
+                  location: location,
+                  salary: salary,
+                ),
+          ),
+        );
       },
 
       child: Container(
@@ -121,6 +131,55 @@ class JobCard extends StatelessWidget {
             Text(company, style: TextStyle(color: Colors.white70)),
             Text(location, style: TextStyle(color: Colors.white70)),
             Text(salary, style: TextStyle(color: Colors.white70)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  final String title;
+  final String company;
+  final String location;
+  final String salary;
+
+  const DetailScreen({
+    super.key,
+    required this.title,
+    required this.company,
+    required this.location,
+    required this.salary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Detail Internship")),
+
+      body: Padding(
+        padding: EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(company, style: TextStyle(fontSize: 20)),
+
+            SizedBox(height: 10),
+
+            Text(location, style: TextStyle(fontSize: 20)),
+
+            SizedBox(height: 10),
+
+            Text(salary, style: TextStyle(fontSize: 20)),
           ],
         ),
       ),
