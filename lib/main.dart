@@ -20,6 +20,7 @@ class _MyAppState extends State<MyApp> {
       "salary": "5 JT / month",
       "color": Colors.blue,
       "icon": Icons.web,
+      "favorite": false,
     },
 
     {
@@ -29,6 +30,7 @@ class _MyAppState extends State<MyApp> {
       "salary": "5 JT / month",
       "color": Colors.green,
       "icon": Icons.storage,
+      "favorite": false,
     },
 
     {
@@ -38,6 +40,7 @@ class _MyAppState extends State<MyApp> {
       "salary": "5 JT / month",
       "color": Colors.purple,
       "icon": Icons.palette,
+      "favorite": false,
     },
   ];
 
@@ -56,6 +59,13 @@ class _MyAppState extends State<MyApp> {
               salary: internships[index]["salary"]!,
               color: internships[index]["color"],
               icon: internships[index]["icon"],
+              isFavorite: internships[index]["favorite"],
+              onFavoriteTap: () {
+                setState(() {
+                  internships[index]["favorite"] =
+                      !internships[index]["favorite"];
+                });
+              },
             );
           },
         ),
@@ -71,6 +81,8 @@ class JobCard extends StatelessWidget {
   final String salary;
   final Color color;
   final IconData icon;
+  final bool isFavorite;
+  final VoidCallback onFavoriteTap;
 
   const JobCard({
     super.key,
@@ -80,6 +92,8 @@ class JobCard extends StatelessWidget {
     required this.salary,
     required this.color,
     required this.icon,
+    required this.isFavorite,
+    required this.onFavoriteTap,
   });
 
   @override
@@ -114,6 +128,15 @@ class JobCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, color: Colors.white, size: 40),
+
+            GestureDetector(
+              onTap: onFavoriteTap,
+              child: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.white,
+                size: 30,
+              ),
+            ),
 
             SizedBox(height: 10),
 
