@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:belajarflutter/widgets/job_cards.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,165 +45,70 @@ class _MyAppState extends State<MyApp> {
     },
   ];
 
+  List<Map<String, dynamic>> filteredInternships = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    filteredInternships = internships;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: ListView.builder(
-          itemCount: internships.length,
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
 
-          itemBuilder: (context, index) {
-            return JobCard(
-              title: internships[index]["title"]!,
-              company: internships[index]["company"]!,
-              location: internships[index]["location"]!,
-              salary: internships[index]["salary"]!,
-              color: internships[index]["color"],
-              icon: internships[index]["icon"],
-              isFavorite: internships[index]["favorite"],
-              onFavoriteTap: () {
-                setState(() {
-                  internships[index]["favorite"] =
-                      !internships[index]["favorite"];
-                });
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    filteredInternships =
+                        internships.where((internship) {
+                          return internship["title"].toLowerCase().contains(
+                            value.toLowerCase(),
+                          );
+                        }).toList();
+                  });
+                },
 
-class JobCard extends StatelessWidget {
-  final String title;
-  final String company;
-  final String location;
-  final String salary;
-  final Color color;
-  final IconData icon;
-  final bool isFavorite;
-  final VoidCallback onFavoriteTap;
+                decoration: InputDecoration(
+                  hintText: "Cari internship...",
+                  prefixIcon: Icon(Icons.search),
 
-  const JobCard({
-    super.key,
-    required this.title,
-    required this.company,
-    required this.location,
-    required this.salary,
-    required this.color,
-    required this.icon,
-    required this.isFavorite,
-    required this.onFavoriteTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-
-          MaterialPageRoute(
-            builder:
-                (context) => DetailScreen(
-                  title: title,
-                  company: company,
-                  location: location,
-                  salary: salary,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-          ),
-        );
-      },
-
-      child: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(20),
-
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-        ),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: Colors.white, size: 40),
-
-            GestureDetector(
-              onTap: onFavoriteTap,
-              child: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: isFavorite ? Colors.red : Colors.white,
-                size: 30,
               ),
             ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredInternships.length,
 
-            SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  return JobCard(
+                    title: filteredInternships[index]["title"],
+                    company: filteredInternships[index]["company"],
+                    location: filteredInternships[index]["location"],
+                    salary: filteredInternships[index]["salary"],
+                    color: filteredInternships[index]["color"],
+                    icon: filteredInternships[index]["icon"],
+                    isFavorite: filteredInternships[index]["favorite"],
 
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                    onFavoriteTap: () {
+                      setState(() {
+                        filteredInternships[index]["favorite"] =
+                            !filteredInternships[index]["favorite"];
+                      });
+                    },
+                  );
+                },
               ),
             ),
-
-            SizedBox(height: 10),
-
-            Text(company, style: TextStyle(color: Colors.white70)),
-            Text(location, style: TextStyle(color: Colors.white70)),
-            Text(salary, style: TextStyle(color: Colors.white70)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final String title;
-  final String company;
-  final String location;
-  final String salary;
-
-  const DetailScreen({
-    super.key,
-    required this.title,
-    required this.company,
-    required this.location,
-    required this.salary,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Detail Internship")),
-
-      body: Padding(
-        padding: EdgeInsets.all(20),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-
-            SizedBox(height: 20),
-
-            Text(company, style: TextStyle(fontSize: 20)),
-
-            SizedBox(height: 10),
-
-            Text(location, style: TextStyle(fontSize: 20)),
-
-            SizedBox(height: 10),
-
-            Text(salary, style: TextStyle(fontSize: 20)),
           ],
         ),
       ),
