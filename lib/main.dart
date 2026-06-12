@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:belajarflutter/models/internships_model.dart';
 import 'package:belajarflutter/widgets/job_cards.dart';
 
 void main() {
@@ -13,39 +14,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> internships = [
-    {
-      "title": "Frontend Developer",
-      "company": "Google",
-      "location": "Remote",
-      "salary": "5 JT / month",
-      "color": Colors.blue,
-      "icon": Icons.web,
-      "favorite": false,
-    },
-
-    {
-      "title": "Backend Developer",
-      "company": "Tokopedia",
-      "location": "Jakarta",
-      "salary": "5 JT / month",
-      "color": Colors.green,
-      "icon": Icons.storage,
-      "favorite": false,
-    },
-
-    {
-      "title": "UI/UX Designer",
-      "company": "Shopee",
-      "location": "Bandung",
-      "salary": "5 JT / month",
-      "color": Colors.purple,
-      "icon": Icons.palette,
-      "favorite": false,
-    },
+  List<InternshipModel> internships = [
+    InternshipModel(
+      title: "Frontend Developer",
+      company: "Google",
+      location: "Remote",
+      salary: "5 JT / month",
+      color: Colors.blue,
+      icon: Icons.web,
+    ),
   ];
 
-  List<Map<String, dynamic>> filteredInternships = [];
+  List<InternshipModel> filteredInternships = [];
 
   @override
   void initState() {
@@ -68,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                   setState(() {
                     filteredInternships =
                         internships.where((internship) {
-                          return internship["title"].toLowerCase().contains(
+                          return internship.title.toLowerCase().contains(
                             value.toLowerCase(),
                           );
                         }).toList();
@@ -91,18 +71,18 @@ class _MyAppState extends State<MyApp> {
 
                 itemBuilder: (context, index) {
                   return JobCard(
-                    title: filteredInternships[index]["title"],
-                    company: filteredInternships[index]["company"],
-                    location: filteredInternships[index]["location"],
-                    salary: filteredInternships[index]["salary"],
-                    color: filteredInternships[index]["color"],
-                    icon: filteredInternships[index]["icon"],
-                    isFavorite: filteredInternships[index]["favorite"],
+                    title: filteredInternships[index].title,
+                    company: filteredInternships[index].company,
+                    location: filteredInternships[index].location,
+                    salary: filteredInternships[index].salary,
+                    color: filteredInternships[index].color,
+                    icon: filteredInternships[index].icon,
+                    isFavorite: filteredInternships[index].favorite,
 
                     onFavoriteTap: () {
                       setState(() {
-                        filteredInternships[index]["favorite"] =
-                            !filteredInternships[index]["favorite"];
+                        filteredInternships[index].favorite =
+                            !filteredInternships[index].favorite;
                       });
                     },
                   );
