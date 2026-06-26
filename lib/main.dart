@@ -1,6 +1,8 @@
+import 'package:belajarflutter/services/intership_service.dart';
 import 'package:flutter/material.dart';
 import 'package:belajarflutter/models/internships_model.dart';
 import 'package:belajarflutter/widgets/job_cards.dart';
+// import 'package:belajarflutter/services/intership_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,24 +16,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<InternshipModel> internships = [
-    InternshipModel(
-      title: "Frontend Developer",
-      company: "Google",
-      location: "Remote",
-      salary: "5 JT / month",
-      color: Colors.blue,
-      icon: Icons.web,
-    ),
-  ];
-
+  final internshipService = InternshipService();
+  List<InternshipModel> internships = [];
   List<InternshipModel> filteredInternships = [];
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
+    loadInternships();
+  }
 
+  Future<void> loadInternships() async {
+    internships = await internshipService.getInternships();
     filteredInternships = internships;
+    isLoading = false;
+    setState(() {});
   }
 
   @override
@@ -66,28 +65,13 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredInternships.length,
-
-                itemBuilder: (context, index) {
-                  return JobCard(
-                    title: filteredInternships[index].title,
-                    company: filteredInternships[index].company,
-                    location: filteredInternships[index].location,
-                    salary: filteredInternships[index].salary,
-                    color: filteredInternships[index].color,
-                    icon: filteredInternships[index].icon,
-                    isFavorite: filteredInternships[index].favorite,
-
-                    onFavoriteTap: () {
-                      setState(() {
-                        filteredInternships[index].favorite =
-                            !filteredInternships[index].favorite;
-                      });
-                    },
-                  );
-                },
-              ),
+              child:
+                  isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                        itemCount: filteredInternships.length,
+                        itemBuilder: (context, index) {},
+                      ),
             ),
           ],
         ),

@@ -5,9 +5,8 @@ class InternshipModel {
   final String company;
   final String location;
   final String salary;
-
-  final dynamic color;
-  final dynamic icon;
+  final Color color;
+  final IconData icon;
 
   bool favorite;
 
@@ -27,9 +26,18 @@ class InternshipModel {
       company: json["company"],
       location: json["location"],
       salary: json["salary"],
-
       color: Colors.blue,
       icon: Icons.work,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "title": title,
+      "company": company,
+      "location": location,
+      "salary": salary,
+      "favorite": favorite,
+    };
   }
 }
